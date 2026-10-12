@@ -73,7 +73,7 @@ function App() {
   }, []);
 
   const handleNavigate = (view: any) => {
-    const protectedViews = ['research', 'management', 'caseDetails', 'ai'];
+    const protectedViews = ['management', 'caseDetails'];
     if (protectedViews.includes(view) && !user) {
       setPendingRoute(view);
       setCurrentView('login');
@@ -509,10 +509,10 @@ function App() {
             <div>
               <h4 className="text-white font-semibold mb-6">Platform</h4>
               <ul className="space-y-3 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-accent-blue transition-colors">Legal Research</a></li>
-                <li><a href="#" className="hover:text-accent-blue transition-colors">Case Management</a></li>
-                <li><a href="#" className="hover:text-accent-blue transition-colors">AI Assistant</a></li>
-                <li><a href="#" className="hover:text-accent-blue transition-colors">Pricing</a></li>
+                <li><button onClick={() => handleNavigate('research')} className="hover:text-accent-blue transition-colors text-left">Legal Research</button></li>
+                <li><button onClick={() => handleNavigate('management')} className="hover:text-accent-blue transition-colors text-left">Case Management</button></li>
+                <li><button onClick={() => handleNavigate('ai')} className="hover:text-accent-blue transition-colors text-left">AI Assistant</button></li>
+                <li><button onClick={() => handleNavigate('about')} className="hover:text-accent-blue transition-colors text-left">About LexIntel</button></li>
               </ul>
             </div>
             

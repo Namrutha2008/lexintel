@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Sphere, Line, Float } from '@react-three/drei';
 import * as THREE from 'three';
@@ -69,16 +69,47 @@ function GraphNodes({ processing }: { processing: boolean }) {
   );
 }
 
+class VisualizationErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any) {
+    console.warn("AI3DVisualization error caught:", error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-navy-950/60 rounded-xl border border-white/5 text-center">
+          <div className="w-10 h-10 rounded-xl bg-accent-purple/20 border border-accent-purple/40 flex items-center justify-center mb-2 animate-pulse">
+            <span className="text-accent-purple text-lg font-bold">AI</span>
+          </div>
+          <span className="text-xs text-slate-400 font-medium">LexIntel Neural Engine</span>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function AI3DVisualization({ processing }: { processing: boolean }) {
   return (
-    <div className="w-full h-full relative rounded-xl overflow-hidden bg-gradient-to-br from-black to-navy-900 border border-white/10">
-      <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" />
-        <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
-        <GraphNodes processing={processing} />
-        <OrbitControls enableZoom={false} autoRotate={false} />
-      </Canvas>
-    </div>
+    <VisualizationErrorBoundary>
+      <div className="w-full h-full relative rounded-xl overflow-hidden bg-gradient-to-br from-black to-navy-900 border border-white/10">
+        <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" />
+          <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
+          <GraphNodes processing={processing} />
+          <OrbitControls enableZoom={false} autoRotate={false} />
+        </Canvas>
+      </div>
+    </VisualizationErrorBoundary>
   );
 }
